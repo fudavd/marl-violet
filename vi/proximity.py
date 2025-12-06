@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import collections
 from typing import TYPE_CHECKING
-
-
+from typing import Generic, TypeVar, List
+from .config import Config
 if TYPE_CHECKING:
     from collections.abc import Generator
     from typing import Any
@@ -12,9 +12,9 @@ if TYPE_CHECKING:
 
     from .agent import Agent
     from .config import Config
+ConfigClass = TypeVar('ConfigClass', bound='Config')
 
-
-class ProximityEngine[ConfigClass: Config = Config]:
+class ProximityEngine(Generic[ConfigClass]):
     __agents: Group[Any]
 
     __chunks: dict[tuple[int, int], set[Agent[ConfigClass]]]

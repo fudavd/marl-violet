@@ -7,7 +7,17 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, Self, TypeIs
+from typing import TypeVar, Union, List
+from dataclasses import dataclass
+from typing import Generic
 
+Int = TypeVar('Int')
+Float = TypeVar('Float')
+T = TypeVar('T', bound='Config')
+
+
+Mono = T
+Poly = Union[T, List[T]]
 
 __all__ = [
     "Config",
@@ -89,13 +99,8 @@ class Window:
     def as_tuple(self) -> tuple[int, int]:
         return (self.width, self.height)
 
-
-type Mono[T] = T
-type Poly[T] = T | list[T]
-
-
 @dataclass
-class Schema[Int: Poly[int], Float: Poly[float]]:
+class Schema(Generic[Int, Float]):
     """All values shared between `Config` and `Matrix`.
 
     NOTE: DOCUMENTATION OF SCHEMA IS INCORRECT AND WILL BE UPDATED IN VERSION 0.3.2.
@@ -249,7 +254,7 @@ class Schema[Int: Poly[int], Float: Poly[float]]:
     window: Window = field(default_factory=Window)
     """The simulation window"""
 
-    def to_configs[T: Config](
+    def to_configs(
         self,
         target: type[T],
     ) -> list[T]:
@@ -257,7 +262,7 @@ class Schema[Int: Poly[int], Float: Poly[float]]:
         return [target(**values) for values in _matrixify(self.__dict__)]
 
 
-Matrix = Schema[Poly[int], Poly[float]]
+Matrix = Schema[Union[int, List[int]], Union[float, List[float]]]
 """`Matrix` is `Config` on steroids.
 
 It allows you to supply a list of values on certain configuration options,
@@ -392,7 +397,7 @@ if __name__ == "__main__":
 """
 
 
-Config = Schema[Mono[int], Mono[float]]
+Config = Schema[int, float]
 """`Config` allows you to tweak the settings of your experiment.
 
 Examples

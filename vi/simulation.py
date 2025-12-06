@@ -53,7 +53,7 @@ from ._static import _StaticSprite
 from .metrics import Metrics
 from .proximity import ProximityEngine
 
-
+from .config import Config
 if TYPE_CHECKING:
     from typing import Any, Self
 
@@ -61,7 +61,8 @@ if TYPE_CHECKING:
 
     from .agent import Agent
     from .config import Config
-
+from typing import Any, Generic, TypeVar
+ConfigClass = TypeVar('ConfigClass', bound=Config)
 
 __all__ = [
     "HeadlessSimulation",
@@ -85,7 +86,7 @@ class Shared:
     """A counter that increases each tick of the simulation."""
 
 
-class HeadlessSimulation[ConfigClass: Config]:
+class HeadlessSimulation(Generic[ConfigClass]):
     """The Headless Mode equivalent of `Simulation`.
 
     Headless Mode removes all the rendering logic from the simulation
@@ -411,7 +412,7 @@ class HeadlessSimulation[ConfigClass: Config]:
         return site_id
 
 
-class Simulation[ConfigClass: Config](HeadlessSimulation[ConfigClass]):
+class Simulation(HeadlessSimulation[ConfigClass]):
     """Offers the same functionality as `HeadlessSimulation`, but adds logic to automatically draw all agents, obstacles and sites to your screen.
 
     If a custom config isn't provided when creating the simulation, the default values of `Config` will be used instead.

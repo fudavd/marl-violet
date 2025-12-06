@@ -13,7 +13,7 @@ from pygame.math import Vector2
 from pygame.sprite import Sprite
 
 from .util import random_angle, random_pos, round_pos
-
+from .config import Config
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -28,13 +28,15 @@ if TYPE_CHECKING:
     from .config import Config
     from .simulation import HeadlessSimulation, Shared
 
+from typing import Generic, TypeVar
+ConfigClass = TypeVar('ConfigClass', bound=Config)
 
 __all__ = [
     "Agent",
 ]
 
 
-class Agent[ConfigClass: Config = Config](Sprite):
+class Agent(Generic[ConfigClass], Sprite):
     """The `Agent` class is home to Violet's various additions and is built on top of [PyGame's Sprite](https://www.pygame.org/docs/ref/sprite.html) class.
 
     While you can simply add this `Agent` class to your simulations by calling `batch_spawn_agents`,

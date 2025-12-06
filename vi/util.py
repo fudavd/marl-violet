@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterator, TypeVar, Optional
 
 from pygame.math import Vector2
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from pygame.rect import Rect
-
+T = TypeVar('T')
 
 __all__ = [
     "count",
@@ -56,7 +56,7 @@ def random_pos(area: Rect, prng: random.Random | None = None) -> Vector2:
     return Vector2(x, y)
 
 
-def first[T](iterator: Iterator[T]) -> T | None:
+def first(iterator: Iterator[T]) -> Optional[T]:
     """Returns the first element in an iterator.
 
     Returns None if the iterator contains no elements.
@@ -64,7 +64,7 @@ def first[T](iterator: Iterator[T]) -> T | None:
     return next(iterator, None)
 
 
-def count[T](iterator: Iterator[T]) -> int:
+def count(iterator: Iterator[T]) -> Optional[int]:
     """Count the number of elements in an iterator.
 
     An alternative way to count the number of elements in an iterator is to collect all the elements
